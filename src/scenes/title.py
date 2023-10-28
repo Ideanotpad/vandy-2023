@@ -1,6 +1,8 @@
 from play_framework import scene, TextBox, SceneManager
 from res import resource
 
+from characters import stick
+
 
 @scene(resource.bg_test_png)
 def title_scene(sm: SceneManager):
@@ -10,8 +12,15 @@ def title_scene(sm: SceneManager):
 
     sm.wait_key()
 
-    sm.hide(title)
+    sm.show(stick)
 
     sm.wait_key()
+
+    stick.set_state("explain")
+    title._text = "Click again to start"
+
+    sm.wait_key()
+
+    sm.hide(title)
 
     return "end"

@@ -12,11 +12,22 @@ class SceneManager:
 
         self.objects = pygame.sprite.Group()
 
+        self.running = True
+
+        quit = pygame.quit
+
+        def stub_quit(*args, **kwargs):
+            nonlocal self
+            self.running = False
+            return quit(*args, **kwargs)
+
+        pygame.quit = stub_quit
+
     def wait_key(self):
         """
         Wait for a key to be pressed.
         """
-        while True:
+        while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -33,7 +44,7 @@ class SceneManager:
         """
         Wait for a certain amount of seconds.
         """
-        while True:
+        while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -85,11 +96,13 @@ class SceneManager:
 
         self.screen = pygame.display.get_surface()
 
-        while True:
+        while self.running:
             scene_name = scene(self)
 
             if scene_name == "exit":
                 pygame.quit()
                 return
+
+            self.objects.empty()
 
             scene = self.scenes[scene_name]
